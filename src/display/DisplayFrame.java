@@ -23,14 +23,15 @@ public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDis
 	private JButton on = new JButton("Fernseher an");
 	private JButton off = new JButton("Fernseher aus");
 	boolean status = false;
-	public DisplayFrame displayFrame;
+	//public DisplayFrame displayFrame;
 	private ArrayList<IServicePoint> observers;
+	DisplayMain displayFrame;
 	
 
 	public DisplayFrame() {
 		super("Display");
 		observers = new ArrayList<IServicePoint>();
-		
+		DisplayMain displayFrame;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		panel = new JPanel();
@@ -78,7 +79,7 @@ public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDis
 		
 		if(ausloeser == on) {
 			try {
-				this.setStatus(true);
+				displayFrame.setStatus(true);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -91,21 +92,12 @@ public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDis
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}	
-		}
-		
-		
+		}		
 	}
-
-
-
-
-
-
 
 	@Override
 	public void register(IServicePoint newObserver) {
 		observers.add(newObserver);
-
 
 	}
 

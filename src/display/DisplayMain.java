@@ -40,7 +40,7 @@ public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
 				String url = protokoll + ip + ":" + port + "/binder";
 				try {
 
-
+					
 					DisplayFrame displayFrame = new DisplayFrame();
 					Thread displayFrameThread = new Thread(displayFrame);
 					displayFrameThread.start();
@@ -76,11 +76,12 @@ public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
 	@Override
 	public void register(IServicePoint newObserver) {
 		observers.add(newObserver);
+		System.out.println(" Observer wurde erfolgreich am Display angemeldet!");
 
 
 	}
 
-	@Override
+	//@Override
 	public void unregister(IServicePoint deleteObserver) {
 		int observerIndex = observers.indexOf(deleteObserver);
 		System.out.println("Observer " + (observerIndex+1) + " deleted");
@@ -110,4 +111,8 @@ public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
 		notifyObserver();
 	}
 
-}
+	
+		
+	}
+
+
