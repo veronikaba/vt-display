@@ -79,7 +79,7 @@ public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDis
 		
 		if(ausloeser == on) {
 			try {
-				displayFrame.setStatus(true);
+				this.setStatus(true);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
