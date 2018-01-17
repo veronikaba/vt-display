@@ -13,17 +13,20 @@ import org.htw.fiw.vs.IBinder;
 import org.htw.fiw.vs.fernseher.IDisplayRemote;
 import org.htw.fiw.vs.fernseher.IServicePoint;
 
-public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
+public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote,ActionListener{
 
 	private ArrayList<IServicePoint> observers;
-	private boolean status;
+	public boolean status;
+	public String number;
+	
+	
+	
 
+	static DisplayFrame displayFrame=new DisplayFrame();
 
-	public DisplayFrame displayFrame;
-
-	public DisplayMain(DisplayFrame DisplayFrame) throws RemoteException {
+	public DisplayMain() throws RemoteException {
 		super();
-		this.displayFrame = displayFrame;
+	
 		observers = new ArrayList<IServicePoint>();
 
 
@@ -34,19 +37,23 @@ public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
 		if(args.length == 2){
 
 			try {
+				
+				//hier stehen lassen!!!
+				System.setProperty("java.rmi.server.hostname","141.45.208.212");
 				String ip = args[0];
 				int port = Integer.parseInt(args[1]);
 				String protokoll = "rmi://";
 				String url = protokoll + ip + ":" + port + "/binder";
 				try {
 
-					
-					DisplayFrame displayFrame = new DisplayFrame();
+					DisplayMain displayMain = new DisplayMain();
+					displayFrame.on.addActionListener(displayMain);
+					displayFrame.off.addActionListener(displayMain);
 					Thread displayFrameThread = new Thread(displayFrame);
 					displayFrameThread.start();
 					System.out.println("Display gestartet");
 
-					DisplayMain displayMain = new DisplayMain(displayFrame);
+				
 					IBinder binder = (IBinder) Naming.lookup(url);
 					binder.bind("Display", displayMain);
 
@@ -76,7 +83,7 @@ public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
 	@Override
 	public void register(IServicePoint newObserver) {
 		observers.add(newObserver);
-		System.out.println(" Observer wurde erfolgreich am Display angemeldet!");
+		System.out.println("Observer wurde erfolgreich am Display angemeldet!");
 
 
 	}
@@ -95,24 +102,45 @@ public class DisplayMain extends UnicastRemoteObject implements IDisplayRemote{
 		for(IServicePoint observer : observers){    
 
 			observer.update(status);
+			observer.update(number);
 
 
 		}
 
 
 	}
-
+    @Override
 	public void setStatus(boolean newStatus) throws RemoteException{
 
 
 		this.status = newStatus;
 
 
-		notifyObserver();
-	}
-
-	
+		this.notifyObserver();
 		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource()==displayFrame.on) {
+			try {
+				this.setStatus(true);
+				System.out.println(status);
+				
+			}catch (Exception exception) {
+			}
+		}
+		if (e.getSource()==displayFrame.off) {
+			try {
+				this.setStatus(false);
+				System.out.println(status);
+			}catch (Exception exception) {
+			}
+
+
+
+		}
+	}
+}
 
 

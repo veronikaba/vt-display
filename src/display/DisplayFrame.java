@@ -18,30 +18,28 @@ import javax.swing.JPanel;
 import org.htw.fiw.vs.fernseher.IDisplayRemote;
 import org.htw.fiw.vs.fernseher.IServicePoint;
 
-public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDisplayRemote{
-	private JPanel panel;
-	private JButton on = new JButton("Fernseher an");
-	private JButton off = new JButton("Fernseher aus");
+public class DisplayFrame extends JFrame implements Runnable,IDisplayRemote{
+
+	JPanel panel;
+	JButton on = new JButton("Fernseher an");
+	JButton off = new JButton("Fernseher aus");
 	boolean status = false;
-	//public DisplayFrame displayFrame;
+	public DisplayFrame displayFrame;
 	private ArrayList<IServicePoint> observers;
-	DisplayMain displayFrame;
-	
+
 
 	public DisplayFrame() {
 		super("Display");
 		observers = new ArrayList<IServicePoint>();
-		DisplayMain displayFrame;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		
+
 
 		panel.add(on);
 		panel.add(off);
-		on.addActionListener(this);
-		off.addActionListener(this);
+
 
 		this.setSize(500, 500);
 		this.setVisible(true);
@@ -53,46 +51,17 @@ public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDis
 		setLocation(screenWidth / 8, screenHeight / 6);
 	}
 
-	
-	
-	
-
-
 	@Override
 	public void run() {
 
 		while(true){
 			try {
 				Thread.sleep(100);
-				
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-	Object ausloeser = e.getSource();
-		
-		if(ausloeser == on) {
-			try {
-				this.setStatus(true);
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		if(ausloeser == off) {
-			try {
-				this.setStatus(false);
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}	
-		}		
 	}
 
 	@Override
@@ -116,19 +85,13 @@ public class DisplayFrame extends JFrame implements Runnable,ActionListener,IDis
 
 			observer.update(status);
 
-
 		}
-
 
 	}
 
 	public void setStatus(boolean newStatus) throws RemoteException{
-
-
 		this.status = newStatus;
-
-
 		notifyObserver();
 	}
-	
+
 }
